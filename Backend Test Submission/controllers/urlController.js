@@ -20,6 +20,7 @@ export const createShortUrl = async (req, res) => {
     });
 
     await log("backend", "info", "controller", `Short URL created for ${url}`);
+
     console.log("contr.. check")
 
     res.status(201).json({
@@ -27,7 +28,11 @@ export const createShortUrl = async (req, res) => {
       expiry: expiry.toISOString()
     });
   } catch (err) {
-    await log("backend", "error", "controller", err.message);
+     try {
+      await log("backend", "error", "controller", err.message);
+    } catch (logErr) {
+      console.error("Failed to log error:", logErr.message);
+    }
     res.status(500).json({ message: 'Internal server error' });
   }
 };
